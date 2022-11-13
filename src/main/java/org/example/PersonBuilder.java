@@ -1,54 +1,47 @@
 package org.example;
 
-import java.util.Optional;
-import java.util.OptionalInt;
-
 public class PersonBuilder {
-    private Optional<String> name;
-    private Optional<String> surname;
-    private OptionalInt age;
-    private Optional<String> address;
+    private String name;
+    private String surname;
+    private int age;
+    private String address;
 
-    public PersonBuilder() {
-        name = Optional.empty();
-        surname = Optional.empty();
-        age = OptionalInt.empty();
-        address = Optional.empty();
-    }
-
-    public PersonBuilder setName(String name) {
-        this.name = Optional.ofNullable(name);
+    public PersonBuilder setName(String name) throws IllegalArgumentException {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("First name required");
+        } else this.name = name;
         return this;
     }
 
-    public PersonBuilder setSurname(String surname) {
-        this.surname = Optional.ofNullable(surname);
+    public PersonBuilder setSurname(String surname) throws IllegalArgumentException {
+        if (surname == null || surname.isEmpty()) {
+            throw new IllegalArgumentException("Surname required");
+        } else this.surname = surname;
         return this;
     }
 
-    public PersonBuilder setAge(int age) {
+    public PersonBuilder setAge(int age) throws IllegalArgumentException {
         if (age < 0) {
             throw new IllegalArgumentException("Age cannot be negative");
+        } else {
+            this.age = age;
         }
-        this.age = OptionalInt.of(age);
         return this;
     }
 
     public PersonBuilder setAddress(String address) {
-        this.address = Optional.ofNullable(address);
+        this.address = address;
         return this;
     }
 
-    public Person build() {
-        if (name.isEmpty() || surname.isEmpty()) {
-            throw new IllegalStateException("First and last name are required");
-        }
+    public Person build() throws IllegalStateException {
         Person person;
-        if (age.isEmpty()) {
-            person = new Person(name.get(), surname.get());
-        } else {
-            person = new Person(name.get(), surname.get(), age.getAsInt());
-        }
+        if (name == null || surname == null)
+            throw new IllegalStateException("First and last name are required");
+        if (age < 0) {
+            person = new Person(name, surname);
+        } else person = new Person(name, surname, age);
+        person.setAddress(address);
         return person;
     }
 }

@@ -1,25 +1,18 @@
 package org.example;
 
 import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalInt;
 
 public class Person {
     private final String name;
     private final String surname;
-    protected OptionalInt age;
-    protected Optional<String> city;
-
-    {
-        age = OptionalInt.empty();
-        city = Optional.empty();
-    }
+    protected int age;
+    protected String city;
 
     public Person(String name, String surname, int age, String city) {
         this.name = name;
         this.surname = surname;
-        this.age = OptionalInt.of(age);
-        this.city = Optional.ofNullable(city);
+        this.age = age;
+        this.city = city;
     }
 
     public Person(String name, String surname) {
@@ -30,16 +23,17 @@ public class Person {
     public Person(String name, String surname, int age) {
         this.name = name;
         this.surname = surname;
-        this.age = OptionalInt.of(age);
+        this.age = age;
     }
 
     //setter
     public void setAge(int age) {
-        this.age = OptionalInt.of(age);
+        this.age = age;
     }
 
-    public void setAddress(String city) {
-        this.city = Optional.ofNullable(city);
+    public String setAddress(String city) {
+        this.city = city;
+        return city;
     }
 
     //getter
@@ -51,25 +45,25 @@ public class Person {
         return surname;
     }
 
-    public OptionalInt getAge() {
+    public int getAge() {
         return age;
     }
 
     public String getAddress() {
-        return city.orElse("Unknown");
+        return city;
     }
 
     public boolean hasAge() {
-        return age.isPresent();
+        return age > 0;
     }
 
     public boolean hasAddress() {
-        return city.isPresent();
+        return city != null;
     }
 
     public void happyBirthday() {
-        if (age.isPresent()) {
-            age = OptionalInt.of(age.getAsInt() + 1);
+        if (hasAge()) {
+            age++;
         }
     }
 
@@ -91,7 +85,7 @@ public class Person {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", age=" + (age.isEmpty() ? "Unknown" : age.getAsInt()) +
+                ", age=" + age +
                 ", town=" + getAddress() +
                 '}';
     }
